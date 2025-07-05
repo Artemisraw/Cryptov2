@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Decrypt Message{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0"><i class="fas fa-unlock me-2"></i>Decrypt Message</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <div class="input-group">
+                                <input type="tel" class="form-control" id="phone" name="phone" 
+                                       placeholder="+1234567890" required>
+<!--                                 <button type="button" class="btn btn-outline-success" id="sendOtpBtn">
+                                    <i class="fas fa-paper-plane"></i> Send OTP
+         result                       </button> -->
+                            </div>
+                            <small class="text-muted">Use the same phone number used for encryption</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="otp" class="form-label">SMS OTP</label>
+                            <input type="text" class="form-control" id="otp" name="otp" 
+                                   placeholder="Enter 6-digit OTP" maxlength="6" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pin" class="form-label">PIN</label>
+                        <input type="password" class="form-control" id="pin" name="pin" 
+                               placeholder="Enter the same PIN used for encryption" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="blob" class="form-label">Encrypted Message</label>
+                        <textarea class="form-control" id="blob" name="blob" rows="4" 
+                                  placeholder="Paste the encrypted message here..." required></textarea>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-unlock me-2"></i>Decrypt Message
+                        </button>
+                    </div>
+                </form>
+
+                {% if result %}
+                <div class="mt-4">
+                    <h5>Decrypted Message:</h5>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <strong>{{ result }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('sendOtpBtn').addEventListener('click', function() {
+    const phone = document.getElementById('phone').value;
+    if (!phone) {
+        alert('Please enter a phone number first');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('phone', phone);
+    
+    fetch('/send_otp', {
+        method: 'POST',
+        body: formData
+    }).then(() => {
+        location.reload();
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body text-center p-5">
+                <i class="fas fa-lock fa-4x text-primary mb-4"></i>
+                <h1 class="card-title mb-4">Secure Message Encryption</h1>
+                <p class="card-text text-muted mb-4">
+                    Encrypt and decrypt your messages securely using SMS OTP verification and PIN protection.
+                    Your messages are protected with military-grade encryption.
+                </p>
+                
+                <div class="row mt-5">
+                    <div class="col-md-6 mb-3">
+                        <div class="d-grid">
+                            <a href="{{ url_for('encrypt') }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-lock me-2"></i>Encrypt Message
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="d-grid">
+                            <a href="{{ url_for('decrypt') }}" class="btn btn-success btn-lg">
+                                <i class="fas fa-unlock me-2"></i>Decrypt Message
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5">
+                    <h5>How it works:</h5>
+                    <div class="row text-start mt-3">
+                        <div class="col-md-4">
+                            <i class="fas fa-mobile-alt text-primary fa-2x mb-2"></i>
+                            <h6>1. SMS Verification</h6>
+                            <small class="text-muted">Enter your phone number to receive a secure OTP</small>
+                        </div>
+                        <div class="col-md-4">
+                            <i class="fas fa-key text-primary fa-2x mb-2"></i>
+                            <h6>2. PIN Protection</h6>
+                            <small class="text-muted">Create a secure PIN for additional protection</small>
+                        </div>
+                        <div class="col-md-4">
+                            <i class="fas fa-shield-alt text-primary fa-2x mb-2"></i>
+                            <h6>3. Encryption</h6>
+                            <small class="text-muted">Your message is encrypted using Fernet encryption</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

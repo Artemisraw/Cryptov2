@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Encrypt Message{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-lock me-2"></i>Encrypt Message</h3>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <div class="input-group">
+                                <input type="tel" class="form-control" id="phone" name="phone" 
+                                       placeholder="+1234567890" required>
+                                <button type="button" class="btn btn-outline-primary" id="sendOtpBtn">
+                                    <i class="fas fa-paper-plane"></i> Send OTP
+                                </button>
+                            </div>
+                            <small class="text-muted">Include country code (e.g., +1234567890)</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="otp" class="form-label">SMS OTP</label>
+                            <input type="text" class="form-control" id="otp" name="otp" 
+                                   placeholder="Enter 6-digit OTP" maxlength="6" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pin" class="form-label">PIN</label>
+                        <input type="password" class="form-control" id="pin" name="pin" 
+                               placeholder="Enter your secure PIN" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="plaintext" class="form-label">Message to Encrypt</label>
+                        <textarea class="form-control" id="plaintext" name="plaintext" rows="4" 
+                                  placeholder="Enter your secret message here..." required></textarea>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-lock me-2"></i>Encrypt Message
+                        </button>
+                    </div>
+                </form>
+
+                {% if result %}
+                <div class="mt-4">
+                    <h5>Encrypted Result:</h5>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <textarea class="form-control" rows="4" readonly>{{ result }}</textarea>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="copyToClipboard()">
+                                    <i class="fas fa-copy"></i> Copy to Clipboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('sendOtpBtn').addEventListener('click', function() {
+    const phone = document.getElementById('phone').value;
+    if (!phone) {
+        alert('Please enter a phone number first');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('phone', phone);
+    
+    fetch('/send_otp', {
+        method: 'POST',
+        body: formData
+    }).then(() => {
+        location.reload();
+    });
+});
+
+function copyToClipboard() {
+    const textArea = document.querySelector('textarea[readonly]');
+    textArea.select();
+    document.execCommand('copy');
+    
+    const button = event.target.closest('button');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    button.classList.add('btn-success');
+    button.classList.remove('btn-outline-primary');
+    
+    setTimeout(() => {
+        button.innerHTML = originalText;
+        button.classList.remove('btn-success');
+        button.classList.add('btn-outline-primary');
+    }, 2000);
+}
+</script>
+{% endblock %}
